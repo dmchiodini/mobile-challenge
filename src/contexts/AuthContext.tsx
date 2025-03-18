@@ -10,6 +10,8 @@ import { Snackbar } from "@react-native-material/core";
 import { View } from "react-native";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
+import { createSession } from "../services/auth";
+import { FirebaseError } from "firebase/app";
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
@@ -29,51 +31,24 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
           router.navigate("/");
         } else {
           setIsAuthenticated(false);
-          router.navigate("/auth/login");
+          router.replace("/auth/login");
         }
       });
     } catch (err) {}
   };
 
   const login = async (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((resp) => {
+    try {
+      const response = await createSession(email, password);
+
+      if (response) {
         setUser({
-          id: resp.user.uid,
-          email: resp.user.email || "",
+          id: response.user.uid || "",
+          email: response.user.email || "",
         });
         setIsAuthenticated(true);
-        router.navigate("/");
-      })
-      .catch((error) => {
-        console.log("Error: ", error.code);
-
-        switch (error.code) {
-          case "auth/invalid-email":
-            Toast.show({
-              type: "error",
-              text1: "Preencha os campos obrigatórios",
-            });
-            break;
-          case "missing-password":
-            Toast.show({
-              type: "error",
-              text1: "Preencha os campos obrigatórios",
-            });
-            break;
-          case "auth/invalid-credential":
-            Toast.show({
-              type: "error",
-              text1: "Email e/ou Senha incorretos",
-            });
-            break;
-          default:
-            Toast.show({
-              type: "error",
-              text1: "Não foi possível efetuar login. Tente novamente!",
-            });
-        }
-      });
+      }
+    } catch (error) {}
   };
 
   const logout = () => {
