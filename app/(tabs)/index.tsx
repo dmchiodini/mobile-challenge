@@ -9,16 +9,21 @@ import {
   ScrollView,
   StatusBar,
   SafeAreaView,
+  TouchableOpacity,
+  Modal,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { words } from "../../words";
 import { IconButton, TextInput } from "@react-native-material/core";
 import { AntDesign } from "@expo/vector-icons";
+import ModalWordDetails from "../../src/components/ModalWordDetails";
 
 export default function WordList() {
   const [loading, setLoading] = useState<boolean>(false);
   const [search, setSearch] = useState("");
   const [wordList, setWordList] = useState(words);
+  const [visibleModal, setVisibleModal] = useState<boolean>(false);
+  const [word, setWord] = useState("");
 
   useEffect(() => {
     if (search !== "") {
@@ -29,6 +34,11 @@ export default function WordList() {
       setWordList(words);
     }
   }, [search]);
+
+  const handleClickItem = (word: string) => {
+    setWord(word);
+    setVisibleModal(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -54,15 +64,21 @@ export default function WordList() {
             data={wordList}
             keyExtractor={(_, index) => String(index)}
             renderItem={({ item }) => (
-              <View style={styles.wordContainer}>
+              <TouchableOpacity
+                style={styles.wordContainer}
+                onPress={() => handleClickItem(item)}
+              >
                 <Text style={styles.word} numberOfLines={3}>
                   {item}
                 </Text>
-              </View>
+              </TouchableOpacity>
             )}
           />
         </>
       )}
+      <Modal transparent={true} animationType="slide" visible={visibleModal}>
+        <ModalWordDetails word={word} close={() => setVisibleModal(false)} />
+      </Modal>
     </View>
   );
 }
@@ -72,6 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: StatusBar.currentHeight,
     alignItems: "center",
+    paddingBottom: 5,
   },
   title: {
     fontSize: 20,
@@ -112,5 +129,6 @@ const styles = StyleSheet.create({
   },
   word: {
     fontWeight: "bold",
+    color: "#2e2ed2",
   },
 });
