@@ -89,7 +89,6 @@ export default function List({ typeList = "wordList", title }: Props) {
   return (
     <View style={styles.container}>
       <>
-        <Text style={styles.title}>{title}</Text>
         {typeList === "wordList" && (
           <View style={styles.inputBox}>
             <TextInput
@@ -142,7 +141,7 @@ export default function List({ typeList = "wordList", title }: Props) {
         <Details
           word={word}
           close={() => setVisibleModal(false)}
-          wordList={wordList}
+          wordList={typeList === "wordList" ? words : wordList}
         />
       </Modal>
     </View>
@@ -153,13 +152,6 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     alignItems: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#2e2ed2",
-    marginTop: 10,
-    marginBottom: 10,
   },
   inputContainer: {
     backgroundColor: "#FFF",

@@ -5,20 +5,18 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  StatusBar,
   Platform,
 } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { Button, IconButton } from "@react-native-material/core";
-import { getWord } from "../../services/api";
-import { WordDetails } from "../../@types/word";
-import { Audio, AVPlaybackStatus } from "expo-av";
+import { Audio } from "expo-av";
 import { words } from "../../../words";
 import {
   getFavoriteWords,
   removeFavoriteWord,
   saveWordInFavorites,
 } from "../../services/myWords";
+import { useWord } from "../../hooks/useWord";
 
 type Props = {
   word: string;
@@ -27,21 +25,21 @@ type Props = {
 };
 
 export default function Details({ word, close, wordList }: Props) {
-  const [index, setIndex] = useState(0);
-  const [wordDetails, setWordDetails] = useState<WordDetails | null>(null);
+  const [index, setIndex] = useState(wordList.indexOf(word));
   const [favoriteWord, setFavoriteWord] = useState({ id: "", favorite: false });
   const [loading, setLoading] = useState(false);
 
-  const getWordDetails = async (wordIndex: number) => {
+  const details = useWord(wordList[index]);
+
+  const getWordDetails = async () => {
     setLoading(true);
+
+    const newDetails = await details.refetch();
     const favorites = await getFavoriteWords();
-    const response = await getWord(wordList[wordIndex]);
 
-    if (response) {
-      setWordDetails(response || ({} as WordDetails));
-
+    if (newDetails.data) {
       const findFavorite = favorites?.find(
-        (favorite) => favorite.word === response.word
+        (favorite) => favorite.word === newDetails.data?.word
       );
 
       if (findFavorite) {
@@ -55,8 +53,6 @@ export default function Details({ word, close, wordList }: Props) {
           favorite: false,
         });
       }
-    } else {
-      setWordDetails(null);
     }
     setLoading(false);
   };
@@ -65,7 +61,7 @@ export default function Details({ word, close, wordList }: Props) {
     const sound = new Audio.Sound();
 
     await sound.loadAsync({
-      uri: wordDetails ? wordDetails.audio : "",
+      uri: details.data ? details.data.audio : "",
     });
 
     await sound.playAsync();
@@ -75,7 +71,7 @@ export default function Details({ word, close, wordList }: Props) {
     const newIndex = index - 1 < 0 ? 0 : index - 1;
     setIndex(newIndex);
 
-    getWordDetails(newIndex);
+    getWordDetails();
   };
 
   const handleNext = () => {
@@ -83,7 +79,7 @@ export default function Details({ word, close, wordList }: Props) {
       index + 1 > words.length - 1 ? words.length - 1 : index + 1;
     setIndex(newIndex);
 
-    getWordDetails(newIndex);
+    getWordDetails();
   };
 
   const handleFavorite = async () => {
@@ -91,7 +87,7 @@ export default function Details({ word, close, wordList }: Props) {
     setFavoriteWord({ ...favoriteWord, favorite: !favoriteWord.favorite });
 
     if (newFavoriteState) {
-      wordDetails?.word && (await saveWordInFavorites(wordDetails?.word));
+      details.data?.word && (await saveWordInFavorites(details.data?.word));
     } else {
       await removeFavoriteWord(favoriteWord.id);
     }
@@ -101,7 +97,7 @@ export default function Details({ word, close, wordList }: Props) {
     const findIndex: number = wordList.indexOf(word);
     setIndex(findIndex);
 
-    getWordDetails(findIndex);
+    getWordDetails();
   }, []);
 
   return (
@@ -124,9 +120,9 @@ export default function Details({ word, close, wordList }: Props) {
             <View style={styles.wordBox}>
               <Text style={styles.textBox}>{wordList[index]}</Text>
               <Text style={styles.textBox}>
-                {wordDetails?.text && wordDetails?.text.replaceAll("/", "")}
+                {details.data?.text && details.data.text.replaceAll("/", "")}
               </Text>
-              {wordDetails && (
+              {details.data && (
                 <>
                   <View style={styles.favoriteButtonContainer}>
                     <IconButton
@@ -141,7 +137,7 @@ export default function Details({ word, close, wordList }: Props) {
                       )}
                     />
                   </View>
-                  {wordDetails.audio && (
+                  {details.data.audio && (
                     <View style={styles.audioButtonContainer}>
                       <IconButton
                         onPress={playSound}
@@ -163,7 +159,7 @@ export default function Details({ word, close, wordList }: Props) {
             {!loading && (
               <View style={styles.detailsBox}>
                 <Text style={styles.title}>Meanings</Text>
-                {!wordDetails ? (
+                {!details.data ? (
                   <View style={styles.groupDetails}>
                     <Text>
                       Sorry, we couldn't find definitions for the word you were
@@ -172,7 +168,7 @@ export default function Details({ word, close, wordList }: Props) {
                   </View>
                 ) : (
                   <ScrollView style={styles.groupDetails}>
-                    {wordDetails?.meanings?.map((detail, index) => (
+                    {details.data?.meanings?.map((detail, index) => (
                       <React.Fragment key={index}>
                         <View style={styles.contentBox}>
                           <Text style={styles.titleContent}>
@@ -209,8 +205,14 @@ export default function Details({ word, close, wordList }: Props) {
                 title="Previous"
                 style={styles.button}
                 onPress={handleBack}
+                disabled={index === 0}
               />
-              <Button title="Next" style={styles.button} onPress={handleNext} />
+              <Button
+                title="Next"
+                style={styles.button}
+                onPress={handleNext}
+                disabled={index === wordList.length - 1}
+              />
             </View>
           </View>
         )}

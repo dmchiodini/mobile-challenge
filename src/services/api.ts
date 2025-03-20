@@ -1,16 +1,12 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
 import { WordDetails } from "../@types/word";
-import { words } from "../../words";
 import { getWordHistory, saveWordInHistory } from "./myWords";
 
 const api = axios.create({
   baseURL: "https://api.dictionaryapi.dev/api/v2/",
 });
 
-export const getWord = async (
-  word: string
-): Promise<WordDetails | undefined> => {
+export const getWord = async (word: string): Promise<WordDetails | null> => {
   try {
     const response = await api.get(`/entries/en/${word}`);
 
@@ -44,7 +40,8 @@ export const getWord = async (
     }
 
     return wordDetails;
-  } catch (erro: any) {
-    console.log("Error: ", erro);
+  } catch (error: any) {
+    console.log("Erro: ", error);
+    return null;
   }
 };
