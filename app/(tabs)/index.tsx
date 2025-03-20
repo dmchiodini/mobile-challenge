@@ -21,6 +21,8 @@ export default function WordList() {
           <MaterialIcons name="logout" color="#2e2ed2" size={14} />
         </TouchableOpacity>
       </View>
+      <Text style={styles.title}>Word List</Text>
+
       <List typeList="wordList" title="Word List" />
     </View>
   );
@@ -46,5 +48,14 @@ const styles = StyleSheet.create({
   text: {
     color: "#2e2ed2",
     fontWeight: "bold",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#2e2ed2",
+    marginBottom: 5,
+  },
+  subTitle: {
+    marginBottom: 10,
   },
 });
