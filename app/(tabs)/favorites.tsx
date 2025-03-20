@@ -1,15 +1,10 @@
-import { router } from "expo-router";
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import useAuth from "../../src/hooks/useAuth";
+import { View, StyleSheet, StatusBar, Platform } from "react-native";
+import List from "../../src/components/List";
 
 export default function Favorites() {
-  const { logout } = useAuth();
   return (
     <View style={styles.container}>
-      <Text>TELA Favorites</Text>
-      <Pressable onPress={logout}>
-        <Text>Sair</Text>
-      </Pressable>
+      <List typeList="favorites" title="Favorites" />
     </View>
   );
 }
@@ -17,7 +12,8 @@ export default function Favorites() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    paddingTop: Platform.OS === "ios" ? 60 : StatusBar.currentHeight,
     alignItems: "center",
+    paddingBottom: 5,
   },
 });
