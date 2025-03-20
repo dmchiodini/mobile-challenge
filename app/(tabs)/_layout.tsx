@@ -1,4 +1,4 @@
-import { Stack, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function TabLayout() {
