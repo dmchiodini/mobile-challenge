@@ -71,7 +71,7 @@ export default function Login() {
             />
           </View>
           <View style={styles.areaButton}>
-            <Button title="Acessar" onPress={handleClick}></Button>
+            <Button title="Acessar" onPress={handleClick} />
           </View>
           <View>
             <Link href="/auth/signup">

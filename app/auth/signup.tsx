@@ -1,30 +1,16 @@
-import {
-  Button,
-  IconButton,
-  Snackbar,
-  TextInput,
-} from "@react-native-material/core";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ImageBackground,
-  TouchableOpacity,
-  Pressable,
-} from "react-native";
+import { Button, IconButton, TextInput } from "@react-native-material/core";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { useState } from "react";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import useAuth from "../../src/hooks/useAuth";
 import { Stack } from "expo-router";
 import { createUser } from "../../src/services/auth";
 
 export default function Signup() {
-  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
 
   const handleClick = async () => {
     await createUser(email, password);
