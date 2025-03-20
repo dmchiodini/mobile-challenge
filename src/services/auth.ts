@@ -32,11 +32,7 @@ export const createUser = async (
   password: string
 ): Promise<void> => {
   try {
-    const response = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    await createUserWithEmailAndPassword(auth, email, password);
     return Toast.show({
       type: "success",
       text1: "Usuário criado com sucesso!",
