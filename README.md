@@ -1,85 +1,110 @@
-# Mobile Challenge 20240202
+# Mobile Challenge
 
-## Introdução
+## Descrição
+Um aplicativo de dicionário de palavras em inglês. Permite pesquisar palavras, visualizar fonética, significados e sinônimos, ouvir a pronúncia e salvar favoritos. Inclui um histórico de palavras visitadas.
 
-Este é um teste para que possamos ver as suas habilidades como Mobile Developer.
+## Tecnologias Utilizadas
+- **React-Native**
+- **Typescript**
+- **Expo**
+- **Firebase**
+- **Tanstack Query**
+- **Expo Router**
+- **Expo-AV**
+- **Async Storage**
+- **React Native Material**
 
-Nesse desafio você deverá desenvolver um aplicativo para listar palavras em inglês, utilizando como base a API [Free Dictionary API](https://dictionaryapi.dev/). O projeto a ser desenvolvido por você tem como objetivo exibir termos em inglês e gerenciar as palavras visualizadas, conforme indicado nos casos de uso que estão logo abaixo.
+## Instalação e Uso
 
-[SPOILER] As instruções de entrega e apresentação do challenge estão no final deste Readme (=
+### Requisitos
+- Node.js instalado
+- Expo CLI instalado globalmente (`npm install -g expo-cli`)
+- Emulador ou dispositivo físico com o aplicativo Expo Go
 
-### Antes de começar
- 
-- Considere como deadline da avaliação a partir do início do teste. Caso tenha sido convidado a realizar o teste e não seja possível concluir dentro deste período, avise a pessoa que o convidou para receber instruções sobre o que fazer.
-- Documentar todo o processo de investigação para o desenvolvimento da atividade (README.md no seu repositório); os resultados destas tarefas são tão importantes do que o seu processo de pensamento e decisões à medida que as completa, por isso tente documentar e apresentar os seus hipóteses e decisões na medida do possível.
+### Passos para instalar
 
-### Instruções iniciais obrigatórias
+# Clone este repositório
+```sh
+git clone https://github.com/seu-usuario/nome-do-repositorio.git
+```
 
-- Utilize as seguintes tecnologias:
+# Acesse a pasta do projeto
+```sh
+cd nome-do-repositorio
+```
 
-#### Tecnologias (Mobile):
-- Nativo ou Hibrido (Flutter, Ionic, React Native, etc)
-- Estilização (Material, Semantic, etc). Ou escrever o seu próprio sob medida 👌
-- Gestão de dados (Redux, Context API, IndexedDB, SQLite, etc)
+# Instale as dependências
+```sh
+npm install
+```
 
-Atente-se, ao desenvolver a aplicação mobile, para conceitos de usabilidade e adeque a interface com elementos visuais para os usuários do seu sistema.
+# Execute o projeto
+```sh
+npm run start
+```
 
-#### Tecnologias (Back-End):
-- Firebase, Supabase, etc
+## Como rodar
+- Para rodar no **emulador**, utilize um emulador configurado com **Android Studio** ou **Xcode**.
+- Para rodar em um **dispositivo físico**, escaneie o **QR Code** fornecido pelo **Expo** com o aplicativo **Expo Go**.
 
-#### Organização:
-- Aplicação de padrões Clean Code
-- Validação de chamadas assíncronas para evitar travamentos
+## Como Usar
+1. **Entre** com seu e-mail e senha.
+2. Se for um **novo usuário**, acesse a tela de **cadastro** clicando em: "**Cadastre-se**" e crie uma conta fornecendo um e-mail e senha.
+3. Na **tela principal**, visualize uma **lista de palavras** com rolagem infinita.
+4. Você pode utilizar o campo de pesquisa para encontrar uma palavra específica ou selecionar através da lista.
+5. **Clique** na palavra desejada para abrir um **modal** com informações detalhadas:
+   - **Fonética**
+   - **Significado**
+   - **Sinônimos**
+6. Para **favoritar** ou **remover** uma palavra dos favoritos, clique no ícone de **estrela**.
+   - **Estrela amarela** indica que a palavra está na lista de favoritos.
+7. Clique no ícone **"play"** para **ouvir a pronúncia** da palavra (se disponível).
+8.  Você pode navegar entre as palavras da lista pressionando os botões **Voltar** e **Próximo**
+9. No **menu de navegação**, acesse:
+   - **Lista de palavras**: Lista de palavras com rolagem infinita.
+   - **Histórico**: Lista de palavras já visitadas.
+   - **Favoritos**: Lista de palavras marcadas como favoritas.
+10. Em **qualquer tela**, clique em uma palavra da lista para visualizar seus detalhes.
+11. Na parte superior direta da tela **"Lista de palavras (Word List)"** há um botão "Sair" onde é possível deslogar do sistema e retornar a tela de **Login**.
 
-### Modelo de Dados:
+## .gitignore
+Certifique-se de incluir um arquivo `.gitignore` para evitar o versionamento de arquivos desnecessários, como:
 
-Conforme indicado na documentação da API, a API retorna as informações de uma palavra, tais como etimologia, sinônimos, exemplos de uso, etc. Utilize os campos indicados na documentação dos endpoints para obter os dados necessários.
- 
-### Front-End:
+```
+# dependencies
+node_modules/
 
-Nessa etapa você deverá desenvolver uma aplicação móvel nativa ou hibrida para consumir a API do desafio.
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
 
-**Obrigatório 1** - Você deverá atender aos seguintes casos de uso:
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
 
-- Como usuário, devo ser capaz de visualizar uma lista de palavras com rolagem infinita
-- Como usuário, devo ser capaz de visualizar uma palavra, significados e a fonética
-- Como usuário, devo ser capaz de salvar a palavra como favorito
-- Como usuário, devo ser capaz de remover a palavra como favorito
-- Como usuário, devo ser capaz de visitar uma lista com as palavras que já vi anteriormente
+# Metro
+.metro-health-check*
 
-A API não possui endpoint com a lista de palavras. Essa lista pode ser carregada em memória ou ser salva em banco de dados local ou remoto (por exemplo, com Firebase). Será necessário usar o [arquivo existente dentro do projeto no Github](https://github.com/dwyl/english-words/blob/master/words_dictionary.json).
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
 
-**Obrigatório 2** - Salvar em cache o resultado das requisições, para agilizar a resposta em caso de buscas com parâmetros repetidos.
+# macOS
+.DS_Store
+*.pem
 
-**Obrigatório 3** - Seguir o wireframe para a página de listagem dos dados. Pode-se alterar a posição dos itens, mantendo as funcionalidades solicitadas.
+# local env files
+.env*.local
 
-<img src="./assets/wireframe.png" width="100%" />
+# typescript
+*.tsbuildinfo
+```
 
-**Diferencial 1** - Implementar um tocador de audio utilizando, por exemplo, https://responsivevoice.org/api ou recursos nativos;
-
-**Diferencial 2** - Utilizar alguma ferramenta de Injeção de Dependência;
-
-**Diferencial 3** - Escrever Unit Tests ou E2E Test. Escolher a melhor abordagem e biblioteca;
-
-**Diferencial 4** - Implementar login com usuário e senha e associar os favoritos e histórico ao ID do usuário, salvando essa informação em banco de dados local ou remoto
-## Readme do Repositório
-
-- Deve conter o título do projeto
-- Uma descrição sobre o projeto em frase
-- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas
-- Como instalar e usar o projeto (instruções)
-- Não esqueça o [.gitignore](https://www.toptal.com/developers/gitignore)
-- Se está usando github pessoal, referencie que é um challenge by coodesh:  
-
->  This is a challenge by [Coodesh](https://coodesh.com/)
-
-## Finalização e Instruções para a Apresentação
-
-1. Adicione o link do repositório com a sua solução no teste
-2. Adicione o link da apresentação do seu projeto no README.md.
-3. Verifique se o Readme está bom e faça o commit final em seu repositório;
-4. Envie e aguarde as instruções para seguir. Sucesso e boa sorte. =)
-
-## Suporte
-
-Use a [nossa comunidade](https://discord.gg/rdXbEvjsWu) para tirar dúvidas sobre o processo ou envie uma mensagem diretamente a um especialista no chat da plataforma. 
+This is a challenge by  <u>**Coodesh**</u>
