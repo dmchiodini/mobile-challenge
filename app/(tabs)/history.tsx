@@ -6,7 +6,7 @@ export default function History() {
     <View style={styles.container}>
       <Text style={styles.title}>History</Text>
       <Text style={styles.subTitle}>History of the words you visited.</Text>
-      <List typeList="history" title="History" />
+      <List typeList="history" />
     </View>
   );
 }

@@ -6,7 +6,7 @@ export default function Favorites() {
     <View style={styles.container}>
       <Text style={styles.title}>Favorites</Text>
       <Text style={styles.subTitle}>Your favorite words.</Text>
-      <List typeList="favorites" title="Favorites" />
+      <List typeList="favorites" />
     </View>
   );
 }
