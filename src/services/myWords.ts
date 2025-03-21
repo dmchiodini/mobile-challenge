@@ -6,29 +6,39 @@ import {
   doc,
   getDocs,
 } from "firebase/firestore";
-import { FavoriteWord } from "../@types/word";
+import { FavoriteWord, HistoryWord } from "../@types/word";
 
-export const saveWordInHistory = async (word: string): Promise<void> => {
+export const saveWordInHistory = async (
+  word: string,
+  userId: string
+): Promise<void> => {
   try {
     await addDoc(collection(db, "history"), {
       word,
+      userId,
     });
   } catch (error) {
     console.log("Error: ", error);
   }
 };
 
-export const saveWordInFavorites = async (word: string): Promise<void> => {
+export const saveWordInFavorites = async (
+  word: string,
+  userId: string
+): Promise<void> => {
   try {
     await addDoc(collection(db, "favorites"), {
       word,
+      userId,
     });
   } catch (error) {
     console.log("Error: ", error);
   }
 };
 
-export const getWordHistory = async (): Promise<string[] | undefined> => {
+export const getWordHistory = async (
+  useId: string
+): Promise<string[] | undefined> => {
   try {
     const historyRef = collection(db, "history");
 
@@ -37,7 +47,9 @@ export const getWordHistory = async (): Promise<string[] | undefined> => {
     const response = await getDocs(historyRef);
 
     response.forEach((item) => {
-      wordHistory.push(item.data().word);
+      if (item.data().userId === useId) {
+        wordHistory.push(item.data().word);
+      }
     });
 
     return wordHistory;
@@ -46,9 +58,9 @@ export const getWordHistory = async (): Promise<string[] | undefined> => {
   }
 };
 
-export const getFavoriteWords = async (): Promise<
-  FavoriteWord[] | undefined
-> => {
+export const getFavoriteWords = async (
+  useId: string
+): Promise<FavoriteWord[] | undefined> => {
   try {
     const favoriteRef = collection(db, "favorites");
     let favoriteWords: FavoriteWord[] = [];
@@ -56,10 +68,13 @@ export const getFavoriteWords = async (): Promise<
     const response = await getDocs(favoriteRef);
 
     response.forEach((item) => {
-      favoriteWords.push({
-        id: item.id,
-        word: item.data().word,
-      });
+      if (item.data().useId === useId) {
+        favoriteWords.push({
+          id: item.id,
+          word: item.data().word,
+          userId: item.data().userId,
+        });
+      }
     });
 
     return favoriteWords;

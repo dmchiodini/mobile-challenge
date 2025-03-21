@@ -1,10 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { AuthContextType, CreateSessionResponse } from "../@types/auth";
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { Snackbar } from "@react-native-material/core";
 import { View } from "react-native";
@@ -12,6 +8,7 @@ import Toast from "react-native-toast-message";
 import { router } from "expo-router";
 import { createSession } from "../services/auth";
 import { FirebaseError } from "firebase/app";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
@@ -28,6 +25,10 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
       onAuthStateChanged(auth, (user) => {
         if (user) {
           setIsAuthenticated(true);
+          setUser({
+            id: user.uid || "",
+            email: user.email || "",
+          });
           router.navigate("/");
         } else {
           setIsAuthenticated(false);

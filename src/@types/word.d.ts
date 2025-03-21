@@ -11,7 +11,13 @@ type Meanings = {
   synonyms: string[];
 };
 
-type FavoriteWord = {
+export type FavoriteWord = {
   id: string;
+  userId: string;
+  word: string;
+};
+
+export type HistoryWord = {
+  userId: string;
   word: string;
 };

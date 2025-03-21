@@ -23,7 +23,7 @@ export default function WordList() {
       </View>
       <Text style={styles.title}>Word List</Text>
 
-      <List typeList="wordList" title="Word List" />
+      <List typeList="wordList" />
     </View>
   );
 }

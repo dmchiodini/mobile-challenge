@@ -17,6 +17,7 @@ import {
   saveWordInFavorites,
 } from "../../services/myWords";
 import { useWord } from "../../hooks/useWord";
+import useAuth from "../../hooks/useAuth";
 
 type Props = {
   word: string;
@@ -25,17 +26,18 @@ type Props = {
 };
 
 export default function Details({ word, close, wordList }: Props) {
+  const { user } = useAuth();
   const [index, setIndex] = useState(wordList.indexOf(word));
   const [favoriteWord, setFavoriteWord] = useState({ id: "", favorite: false });
   const [loading, setLoading] = useState(false);
 
-  const details = useWord(wordList[index]);
+  const details = useWord(wordList[index], user?.id || "");
 
   const getWordDetails = async () => {
     setLoading(true);
 
     const newDetails = await details.refetch();
-    const favorites = await getFavoriteWords();
+    const favorites = await getFavoriteWords(user?.id || "");
 
     if (newDetails.data) {
       const findFavorite = favorites?.find(
@@ -87,7 +89,8 @@ export default function Details({ word, close, wordList }: Props) {
     setFavoriteWord({ ...favoriteWord, favorite: !favoriteWord.favorite });
 
     if (newFavoriteState) {
-      details.data?.word && (await saveWordInFavorites(details.data?.word));
+      details.data?.word &&
+        (await saveWordInFavorites(details.data?.word, user?.id || ""));
     } else {
       await removeFavoriteWord(favoriteWord.id);
     }
@@ -202,13 +205,13 @@ export default function Details({ word, close, wordList }: Props) {
 
             <View style={styles.buttonBox}>
               <Button
-                title="Previous"
+                title="Voltar"
                 style={styles.button}
                 onPress={handleBack}
                 disabled={index === 0}
               />
               <Button
-                title="Next"
+                title="Próximo"
                 style={styles.button}
                 onPress={handleNext}
                 disabled={index === wordList.length - 1}

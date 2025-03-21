@@ -1,12 +1,15 @@
 import axios from "axios";
-import { WordDetails } from "../@types/word";
+import { HistoryWord, WordDetails } from "../@types/word";
 import { getWordHistory, saveWordInHistory } from "./myWords";
 
 const api = axios.create({
   baseURL: "https://api.dictionaryapi.dev/api/v2/",
 });
 
-export const getWord = async (word: string): Promise<WordDetails | null> => {
+export const getWord = async (
+  word: string,
+  userId: string
+): Promise<WordDetails | null> => {
   try {
     const response = await api.get(`/entries/en/${word}`);
 
@@ -29,13 +32,13 @@ export const getWord = async (word: string): Promise<WordDetails | null> => {
       })),
     };
 
-    const history = await getWordHistory();
+    const history = await getWordHistory(userId);
 
     if (history) {
       const wordExists = history.includes(word);
 
       if (!wordExists) {
-        saveWordInHistory(word);
+        saveWordInHistory(word, userId);
       }
     }
 

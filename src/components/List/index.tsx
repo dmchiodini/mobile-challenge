@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
@@ -18,13 +19,14 @@ import {
 import { db } from "../../../firebaseConfig";
 import { words } from "../../../words";
 import Details from "../Details";
+import useAuth from "../../hooks/useAuth";
 
 type Props = {
-  title: string;
   typeList: "wordList" | "history" | "favorites";
 };
 
-export default function List({ typeList = "wordList", title }: Props) {
+export default function List({ typeList = "wordList" }: Props) {
+  const { user } = useAuth();
   const [search, setSearch] = useState("");
   const [wordList, setWordList] = useState<string[]>([]);
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
@@ -51,7 +53,8 @@ export default function List({ typeList = "wordList", title }: Props) {
         let favoriteWord: string[] = [];
 
         snapshot.forEach((item: DocumentData) => {
-          favoriteWord.push(item.data().word);
+          if (item.data().userId === user?.id)
+            favoriteWord.push(item.data().word);
         });
 
         setWordList(favoriteWord);
@@ -71,15 +74,12 @@ export default function List({ typeList = "wordList", title }: Props) {
   };
 
   useEffect(() => {
-    if (typeList === "wordList") {
-      if (search !== "") {
-        const newList = words.filter((value) => value === search);
+    if (typeList === "wordList" && search !== "") {
+      const newList = words.filter((value) => value === search.toLowerCase());
 
-        setWordList(newList);
-      } else {
-        setWordList(words);
-      }
+      return setWordList(newList);
     }
+    setWordList(words);
   }, [search]);
 
   useEffect(() => {
