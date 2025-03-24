@@ -23,22 +23,22 @@ Um aplicativo de dicionário de palavras em inglês. Permite pesquisar palavras,
 
 ### Passos para instalar
 
-# Clone este repositório
+**Clone este repositório**
 ```sh
 git clone https://github.com/seu-usuario/nome-do-repositorio.git
 ```
 
-# Acesse a pasta do projeto
+**Acesse a pasta do projeto**
 ```sh
 cd nome-do-repositorio
 ```
 
-# Instale as dependências
+**Instale as dependências**
 ```sh
 npm install
 ```
 
-# Execute o projeto
+**Execute o projeto**
 ```sh
 npm run start
 ```
@@ -107,4 +107,4 @@ yarn-error.*
 *.tsbuildinfo
 ```
 
-This is a challenge by  <u>**Coodesh**</u>
+This is a challenge by [Coodesh](https://coodesh.com/)
