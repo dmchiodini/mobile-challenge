@@ -67,6 +67,8 @@ npm run start
 10. Em **qualquer tela**, clique em uma palavra da lista para visualizar seus detalhes.
 11. Na parte superior direta da tela **"Lista de palavras (Word List)"** há um botão "Sair" onde é possível deslogar do sistema e retornar a tela de **Login**.
 
+![telas](./assets/screens.png)
+
 ## .gitignore
 Certifique-se de incluir um arquivo `.gitignore` para evitar o versionamento de arquivos desnecessários, como:
 
